@@ -637,7 +637,15 @@ window.addEventListener('resize', resize);
 window.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
-  if (document.activeElement?.matches('button') && (key === ' ' || key === 'enter')) return;
+  // During play, Space belongs to the game even if a HUD control was the last
+  // clicked element. Prevent the browser from firing that button a second time.
+  if (state.phase === 'active' && key === ' ') {
+    event.preventDefault();
+    document.activeElement?.blur();
+    if (!event.repeat) jump();
+    return;
+  }
+  if (document.activeElement?.matches('button') && key === 'enter') return;
   if (state.phase === 'active' && ['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(key)) event.preventDefault();
   if (key === 'escape') {
     if (state.phase === 'active') pauseGame();
@@ -646,10 +654,6 @@ window.addEventListener('keydown', (event) => {
   }
   if (state.phase === 'question' && !state.answerLocked && /^[1-4]$/.test(key)) {
     answerQuestion(Number(key) - 1);
-    return;
-  }
-  if (state.phase === 'active' && key === ' ' && !event.repeat) {
-    jump();
     return;
   }
   if (state.phase === 'active') keys.add(key);
