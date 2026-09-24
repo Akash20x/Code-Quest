@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080b20" />
+    <title>Code Quest: JavaScript Arena</title>
+    <meta name="description" content="Explore a park maze, mysterious house, and neon city in a 3D JavaScript puzzle adventure." />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas" tabindex="0" aria-label="3D game area. Use WASD or arrow keys to move, Space to jump, and Q or E to turn."></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">{ }</span><span>CODE<span class="brand-accent">QUEST</span><small>JavaScript Arena</small></span></div>
+        <div class="top-actions">
+          <button id="sound-button" class="icon-button" type="button" aria-label="Turn sound on" aria-pressed="false" title="Toggle sound">♫ <span>Sound off</span></button>
+          <button id="pause-button" class="icon-button" type="button" title="Pause game">Ⅱ <span>Pause</span></button>
+          <button id="restart-button" class="icon-button" type="button" title="Restart game">↻ <span>Restart</span></button>
+        </div>
+      </header>
+
+      <main>
+        <section class="mission-card" aria-label="Current mission">
+          <div class="mission-top"><span class="signal"><i></i> Mission active</span><span id="level-counter">Level 01 / 03</span></div>
+          <h1 id="level-name">The Syntax Garden</h1>
+          <p id="level-description">Follow the garden paths, solve code coins, and find the gate.</p>
+          <div class="progress-heading"><span>Portal charge</span><strong id="progress-label">0 / 30 XP</strong></div>
+          <div class="progress-track" role="progressbar" aria-label="Portal charge" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" id="progress-bar"><span id="progress-fill"></span></div>
+          <p id="portal-hint" class="portal-hint">Find and solve 3 coins to open the portal.</p>
+        </section>
+
+        <aside class="stats" aria-label="Game status">
+          <button class="stat" id="score-stat" type="button" aria-label="Show score details"><span class="stat-icon coin-icon">◆</span><span><small>Score</small><strong id="score-value">0</strong></span></button>
+          <button class="stat" id="lives-stat" type="button" aria-label="Show lives details"><span class="stat-icon heart-icon">♥</span><span><small>Lives</small><strong id="lives-value">♥ ♥ ♥</strong></span></button>
+          <button class="stat" id="level-stat" type="button" aria-label="Show level details"><span class="stat-icon level-icon">⌁</span><span><small>Level</small><strong id="level-value">1</strong></span></button>
+        </aside>
+
+        <div class="bottom-bar">
+          <div class="controls-help"><span class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span>move · <kbd>Space</kbd> jump</span><span class="help-divider"></span><span>Drag to look · Q / E to turn</span></div>
+          <button id="next-challenge" class="challenge-button" type="button">Get a clue <span>↗</span></button>
+        </div>
+
+        <div id="touch-controls" class="touch-controls" aria-label="Movement controls">
+          <button type="button" data-direction="up" aria-label="Move forward">▲</button>
+          <div><button type="button" data-direction="left" aria-label="Move left">◀</button><button type="button" data-direction="down" aria-label="Move backward">▼</button><button type="button" data-direction="right" aria-label="Move right">▶</button></div>
+          <button type="button" data-direction="jump" aria-label="Jump over low walls">Jump</button>
+        </div>
+        <div id="look-hint" class="look-hint" aria-hidden="true">↔ Drag to look around</div>
+      </main>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <div id="screen-reader-status" class="sr-only" role="status" aria-live="polite"></div>
+
+      <div id="overlay" class="overlay is-intro" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+        <div class="overlay-card intro-card">
+          <div class="card-glow"></div>
+          <div class="intro-symbol" aria-hidden="true">{ <span>?</span> }</div>
+          <p class="eyebrow">Enter the arena</p>
+          <h2 id="overlay-title">Every coin has<br />a question.</h2>
+          <p id="overlay-copy">Explore a park maze, a mysterious house, and a neon city. Jump low barriers, solve JavaScript puzzles, and unlock each portal.</p>
+          <div class="intro-rules"><span><b>01</b> Find a coin</span><span><b>02</b> Solve the code</span><span><b>03</b> Enter the portal</span></div>
+          <button id="overlay-primary" class="primary-button" type="button">Start adventure <span>→</span></button>
+          <p class="minor-note">WASD / arrows to move · Space to jump · Esc to pause</p>
+        </div>
+      </div>
+
+      <div id="question-modal" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="question-title">
+        <div class="overlay-card question-card">
+          <div class="question-head"><span id="question-topic" class="topic-pill">Variables</span><span class="question-value">+10 XP</span></div>
+          <h2 id="question-title">What is the output?</h2>
+          <p class="question-instruction">Read the code, then choose the result. Each opened question is remembered, even after restarting.</p>
+          <pre class="code-panel"><code id="question-code"></code></pre>
+          <div id="answer-options" class="answer-options" role="group" aria-label="Answer choices"></div>
+          <div id="answer-feedback" class="answer-feedback hidden" role="status" aria-live="polite"></div>
+          <button id="question-continue" class="primary-button hidden" type="button">Continue exploring <span>→</span></button>
+          <p class="question-shortcut">Press 1–4 to choose an answer</p>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
